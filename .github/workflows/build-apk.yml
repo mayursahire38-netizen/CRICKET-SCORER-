@@ -33,6 +33,13 @@ jobs:
           npx cap init "MSA Cricket Scorer" "com.msa.cricketscorer" --web-dir www
           npx cap add android
           npx cap sync android
+          node -e '
+            const fs = require("fs");
+            const p = "android/app/build.gradle";
+            let g = fs.readFileSync(p, "utf8");
+            g += `\nconfigurations.all {\n  resolutionStrategy {\n    force "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"\n    force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22"\n    force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"\n  }\n}\n`;
+            fs.writeFileSync(p, g);
+          '
 
       - name: Build Debug APK
         env:
